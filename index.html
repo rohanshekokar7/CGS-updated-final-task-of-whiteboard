@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Whiteboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <div class="whiteboard-container">
+            <div class="toolbar">
+                 <div class="tool-group">
+                    <label for="board-switcher">Board:</label>
+                    <select id="board-switcher"></select>
+                    <button id="new-board-btn" class="action-button" title="New Board">+</button>
+                    <button id="delete-board-btn" class="action-button" title="Delete Board">-</button>
+                </div>
+                <div class="tool-group">
+                    <label>Tools:</label>
+                    <button id="pencil-tool" class="tool-button active" title="Pencil (P)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg></button>
+                    <button id="ink-pen-tool" class="tool-button" title="Ink Pen (I)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zM4.207 10.5l-3 3a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0-.708-.708zM14.5 5.793l-1.5-1.5-7.5 7.5-1.5 1.5-1.5-1.5 7.5-7.5 1.5-1.5-1.5-1.5L1.5 11.5l3 3L14.5 5.793z"/></svg></button>
+                    <button id="eraser-tool" class="tool-button" title="Eraser (E)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm2.121.707a1 1 0 0 0-1.414 0L4.16 7.547l5.293 5.293 4.633-4.633a1 1 0 0 0 0-1.414l-3.879-3.879zM8.746 13.547 3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z"/></svg></button>
+                    <button id="rectangle-tool" class="tool-button" title="Rectangle (R)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/></svg></button>
+                    <button id="circle-tool" class="tool-button" title="Circle (C)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/></svg></button>
+                    <button id="line-tool" class="tool-button" title="Line (L)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"/></svg></button>
+                </div>
+                <div class="tool-group">
+                    <label>Actions:</label>
+                    <button id="undo-btn" class="action-button" title="Undo (Ctrl+Z)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                    <button id="redo-btn" class="action-button" title="Redo (Ctrl+Y)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966a.25.25 0 0 1 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg></button>
+                    <button id="clear-layer-btn" class="action-button" title="Clear Layer">Clear</button>
+                    <button id="export-png" class="action-button" title="Export as PNG"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg> Export</button>
+                </div>
+                <div class="tool-group">
+                    <label for="stroke-color">Color:</label>
+                    <input type="color" id="stroke-color" value="#000000">
+                </div>
+                <div class="tool-group">
+                    <label for="stroke-width">Size:</label>
+                    <input type="range" id="stroke-width" min="1" max="50" value="5">
+                    <div id="stroke-preview" style="width: 50px; height: 50px; border: 1px solid var(--border-color); border-radius: 6px; display: flex; justify-content: center; align-items: center; transition: all 0.2s ease;">
+                        <div id="stroke-dot" style="width: 5px; height: 5px; border-radius: 50%; background-color: rgb(0, 0, 0); transition: all 0.2s ease;"></div>
+                    </div>
+                </div>
+                <div class="tool-group" style="margin-left: auto;">
+                    <button id="theme-toggle" class="action-button" title="Toggle Theme">
+                        <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></svg>
+                        <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="whiteboard-canvas"></canvas>
+            </div>
+        </div>
+
+        <div id="layers-panel">
+            <h3>Layers</h3>
+            <ul id="layers-list"></ul>
+            <div id="layers-controls">
+                <button id="add-layer-btn" class="action-button">Add Layer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Simple EventEmitter for pub/sub pattern (Publish/Subscribe).
+         * This class allows different parts of the application to communicate
+         * without being directly connected. One part 'emits' an event, and
+         * any other part 'on' (listening for) that event will react.
+         * This is great for keeping the code organized and decoupled.
+         */
+        class EventEmitter {
+            constructor() {
+                this.events = {};
+            }
+
+            /**
+             * Subscribe to an event.
+             * @param {string} eventName - The name of the event to listen for.
+             * @param {Function} listener - The callback function to execute when the event is emitted.
+             */
+            on(eventName, listener) {
+                if (!this.events[eventName]) {
+                    this.events[eventName] = [];
+                }
+                this.events[eventName].push(listener);
+            }
+
+            /**
+             * Publish an event.
+             * @param {string} eventName - The name of the event to emit.
+             * @param  {...any} args - Any arguments to pass to the listeners.
+             */
+            emit(eventName, ...args) {
+                if (this.events[eventName]) {
+                    this.events[eventName].forEach(listener => listener(...args));
+                }
+            }
+        }
+
+        /**
+         * Manages all interactions with the browser's localStorage.
+         * This class centralizes the logic for saving and loading data,
+         * making it easy to manage how the application state is persisted.
+         */
+        class Storage {
+            /**
+             * Retrieves an item from localStorage and parses it as JSON.
+             * @param {string} key - The key of the item to retrieve.
+             * @returns {any | null} The parsed data or null if not found.
+             */
+            get(key) {
+                try {
+                    const item = localStorage.getItem(key);
+                    return item ? JSON.parse(item) : null;
+                } catch (e) {
+                    // If it's not valid JSON, return it as a plain string.
+                    return localStorage.getItem(key);
+                }
+            }
+
+            /**
+             * Saves an item to localStorage. Converts objects to JSON strings.
+             * @param {string} key - The key under which to store the value.
+             * @param {any} value - The value to store.
+             */
+            set(key, value) {
+                const valueToStore = typeof value === 'object' ? JSON.stringify(value) : value;
+                localStorage.setItem(key, valueToStore);
+            }
+        }
+
+        /**
+         * Handles the UI and logic for the toolbar.
+         * It listens for user clicks on buttons and emits events
+         * to notify the rest of the application about the user's actions.
+         */
+        class Toolbar extends EventEmitter {
+            constructor() {
+                super();
+                // Store references to all the toolbar's HTML elements for easy access.
+                this.elements = {
+                    boardSwitcher: document.getElementById('board-switcher'),
+                    newBoardBtn: document.getElementById('new-board-btn'),
+                    deleteBoardBtn: document.getElementById('delete-board-btn'),
+                    colorPicker: document.getElementById('stroke-color'),
+                    widthSlider: document.getElementById('stroke-width'),
+                    clearLayerBtn: document.getElementById('clear-layer-btn'),
+                    undoBtn: document.getElementById('undo-btn'),
+                    redoBtn: document.getElementById('redo-btn'),
+                    toolButtons: document.querySelectorAll('.tool-button'),
+                    themeToggle: document.getElementById('theme-toggle'),
+                    exportBtn: document.getElementById('export-png'),
+                    strokeDot: document.getElementById('stroke-dot'),
+                };
+                this.initListeners();
+            }
+
+            /**
+             * Sets up all the event listeners for the toolbar elements.
+             * When a user interacts with an element, this class emits a corresponding event.
+             */
+            initListeners() {
+                // Tool selection
+                this.elements.toolButtons.forEach(b => b.addEventListener('click', () => this.emit('tool:change', b.id.replace('-tool', ''))));
+                
+                // Color and width changes
+                this.elements.colorPicker.addEventListener('change', (e) => this.emit('color:change', e.target.value));
+                this.elements.widthSlider.addEventListener('input', (e) => this.emit('width:change', e.target.value));
+                
+                // Action buttons
+                this.elements.undoBtn.addEventListener('click', () => this.emit('history:undo'));
+                this.elements.redoBtn.addEventListener('click', () => this.emit('history:redo'));
+                this.elements.clearLayerBtn.addEventListener('click', () => this.emit('layer:clear'));
+                
+                // Board management
+                this.elements.boardSwitcher.addEventListener('change', (e) => this.emit('board:switch', e.target.value));
+                this.elements.newBoardBtn.addEventListener('click', () => this.emit('board:new'));
+                this.elements.deleteBoardBtn.addEventListener('click', () => this.emit('board:delete'));
+
+                // App-level actions
+                this.elements.exportBtn.addEventListener('click', () => this.emit('app:export'));
+                this.elements.themeToggle.addEventListener('click', () => this.emit('theme:toggle'));
+            }
+            
+            /**
+             * Enables or disables the undo/redo buttons based on the history state.
+             * @param {{canUndo: boolean, canRedo: boolean}} historyState - The current state of the history.
+             */
+            updateHistoryButtons({ canUndo, canRedo }) {
+                this.elements.undoBtn.disabled = !canUndo;
+                this.elements.redoBtn.disabled = !canRedo;
+            }
+
+            /**
+             * Fills the board switcher dropdown with the available boards.
+             * @param {Array<Object>} boards - An array of board objects.
+             * @param {string} activeBoardId - The ID of the currently active board.
+             */
+            populateBoardSwitcher(boards, activeBoardId) {
+                this.elements.boardSwitcher.innerHTML = boards.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+                this.elements.boardSwitcher.value = activeBoardId;
+                // You can't delete the last board.
+                this.elements.deleteBoardBtn.disabled = boards.length <= 1;
+            }
+
+            /**
+             * Updates the UI to show which tool is currently active.
+             * @param {string} toolName - The name of the tool to activate (e.g., 'pencil').
+             */
+            selectTool(toolName) {
+                this.elements.toolButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.id === `${toolName}-tool`);
+                });
+            }
+
+            /**
+             * Updates the stroke preview dot to show the current color and size.
+             * @param {{color: string, width: number}} strokeOptions - The current stroke options.
+             */
+            updateStrokePreview({ color, width }) {
+                this.elements.strokeDot.style.backgroundColor = color;
+                this.elements.strokeDot.style.width = `${width}px`;
+                this.elements.strokeDot.style.height = `${width}px`;
+            }
+        }
+
+        /**
+         * Manages all the data for boards and layers, including their state and history (for undo/redo).
+         * It also controls the Layers Panel UI.
+         */
+        class LayerManager extends EventEmitter {
+            constructor(storage) {
+                super();
+                this.storage = storage;
+                this.boards = [];
+                this.activeBoardId = null;
+                this.activeLayerId = null;
+                // Store references to the layer panel's HTML elements.
+                this.elements = {
+                    layersList: document.getElementById('layers-list'),
+                    addLayerBtn: document.getElementById('add-layer-btn'),
+                };
+                this.init();
+                this.initListeners();
+            }
+
+            /**
+             * Initializes the LayerManager by loading data from storage.
+             * If no data exists, it creates a default board.
+             */
+            init() {
+                this.boards = this.storage.get('whiteboards') || [];
+                this.activeBoardId = this.storage.get('activeBoardId');
+
+                if (this.boards.length === 0) {
+                    this.createNewBoard('My First Board', false); // Create a board without prompting
+                } else {
+                    this.migrateOldData(); // Check if data is from an older version
+                }
+                
+                // If the stored active board doesn't exist anymore, select the first one.
+                if (!this.boards.find(b => b.id === this.activeBoardId)) {
+                    this.activeBoardId = this.boards[0]?.id;
+                }
+                
+                this.loadBoard(this.activeBoardId);
+            }
+
+            /**
+             * Sets up event listeners for the layer panel.
+             */
+            initListeners() {
+                this.elements.addLayerBtn.addEventListener('click', this.addNewLayer.bind(this));
+                // Use event delegation for clicks within the layers list.
+                this.elements.layersList.addEventListener('click', this.handleLayerClick.bind(this));
+            }
+            
+            /**
+             * This function handles migrating data from a previous version of the app
+             * that didn't have a layer system. It converts old board data into the new layer format.
+             */
+            migrateOldData() {
+                let wasMigrated = false;
+                this.boards.forEach(board => {
+                    if (!board.layers) { // If a board object doesn't have a 'layers' property, it's old data.
+                       const layer = this.createLayerObject('Layer 1', board.data);
+                       if (board.data) {
+                           layer.history.push(board.data);
+                           layer.historyIndex = 0;
+                       }
+                       board.layers = [layer]; // Create a new layers array
+                       board.activeLayerId = layer.id;
+                       delete board.data; // Remove the old data property
+                       wasMigrated = true;
+                    }
+                });
+                if(wasMigrated) this.save(); // Save the migrated data.
+            }
+
+            // Helper functions to get the current active board and layer objects.
+            getActiveBoard = () => this.boards.find(b => b.id === this.activeBoardId);
+            getActiveLayer = () => this.getActiveBoard()?.layers.find(l => l.id === this.activeLayerId);
+            
+            /**
+             * Loads a specific board, making it the active one.
+             * @param {string} boardId - The ID of the board to load.
+             */
+            loadBoard(boardId) {
+                const board = this.boards.find(b => b.id === boardId);
+                if (board) {
+                    this.activeBoardId = boardId;
+                    this.activeLayerId = board.activeLayerId || board.layers[0]?.id;
+                    this.storage.set('activeBoardId', this.activeBoardId);
+                    this.emit('manager:updated'); // Notify the app that the state has changed.
+                }
+            }
+            
+            /**
+             * Creates a new whiteboard.
+             * @param {string} name - The default name for the new board.
+             * @param {boolean} [shouldPrompt=true] - Whether to ask the user for a name.
+             */
+            createNewBoard(name, shouldPrompt = true) {
+                const boardName = shouldPrompt ? prompt("New board name:", name) : name;
+                if (boardName) {
+                    const firstLayer = this.createLayerObject('Layer 1');
+                    const newBoard = { id: Date.now().toString(), name: boardName, layers: [firstLayer], activeLayerId: firstLayer.id };
+                    this.boards.push(newBoard);
+                    this.loadBoard(newBoard.id);
+                    this.save();
+                }
+            }
+
+            /**
+             * Deletes the currently active board.
+             */
+            deleteActiveBoard() {
+                if (this.boards.length > 1 && confirm(`Delete board "${this.getActiveBoard().name}"?`)) {
+                    this.boards = this.boards.filter(b => b.id !== this.activeBoardId);
+                    this.loadBoard(this.boards[0].id); // Load the first remaining board
+                    this.save();
+                }
+            }
+
+            /**
+             * Adds a new layer to the current board.
+             */
+            addNewLayer() {
+                const board = this.getActiveBoard();
+                if (board) {
+                    const layerName = prompt('New layer name:', `Layer ${board.layers.length + 1}`);
+                    if (layerName) {
+                        const newLayer = this.createLayerObject(layerName);
+                        board.layers.push(newLayer);
+                        this.activeLayerId = newLayer.id; // Make the new layer active
+                        board.activeLayerId = this.activeLayerId;
+                        this.save();
+                        this.emit('manager:updated');
+                    }
+                }
+            }
+            
+            /**
+             * Creates a standard layer object.
+             * @param {string} name - The name of the layer.
+             * @param {string | null} [data=null] - The initial image data for the layer.
+             * @returns {Object} A new layer object.
+             */
+            createLayerObject(name, data = null) {
+                return { id: Date.now().toString(), name, isVisible: true, data, history: [], historyIndex: -1 };
+            }
+
+            /**
+             * Handles all click events on the layers list (select, toggle visibility, delete).
+             * @param {Event} e - The click event object.
+             */
+            handleLayerClick(e) {
+                const layerItem = e.target.closest('.layer-item');
+                if (!layerItem) return;
+
+                const layerId = layerItem.dataset.id;
+                const board = this.getActiveBoard();
+                const layer = board.layers.find(l => l.id === layerId);
+
+                if (e.target.matches('.layer-visibility, .layer-visibility *')) { // Check for clicks on the visibility button or its children (emoji)
+                    layer.isVisible = !layer.isVisible;
+                } else if (e.target.matches('.delete-layer-btn, .delete-layer-btn *')) {
+                    this.deleteLayer(layerId);
+                } else {
+                    // If the click was on the item itself, make it the active layer.
+                    this.activeLayerId = layerId;
+                    board.activeLayerId = layerId;
+                }
+                this.save();
+                this.emit('manager:updated');
+            }
+            
+            /**
+             * Deletes a specific layer from the current board.
+             * @param {string} layerId - The ID of the layer to delete.
+             */
+            deleteLayer(layerId) {
+                const board = this.getActiveBoard();
+                if (board.layers.length > 1) { // Prevent deleting the last layer.
+                    const layer = board.layers.find(l => l.id === layerId);
+                    if (confirm(`Delete layer "${layer.name}"?`)) {
+                        board.layers = board.layers.filter(l => l.id !== layerId);
+                        // If the deleted layer was the active one, make the last layer in the list active.
+                        if (this.activeLayerId === layerId) {
+                            this.activeLayerId = board.layers[board.layers.length-1].id;
+                            board.activeLayerId = this.activeLayerId;
+                        }
+                    }
+                } else {
+                    alert('Cannot delete the last layer.');
+                }
+            }
+            
+            /**
+             * Updates the image data for the active layer and manages the history stack for undo/redo.
+             * @param {string} dataUrl - The new image data as a base64 Data URL.
+             */
+            updateActiveLayerData(dataUrl) {
+                const layer = this.getActiveLayer();
+                if (layer) {
+                    // If we are undoing and then draw something new, we need to clear the "redo" history.
+                    if (layer.historyIndex < layer.history.length - 1) {
+                        layer.history.splice(layer.historyIndex + 1);
+                    }
+                    layer.history.push(dataUrl);
+                    layer.historyIndex++;
+                    layer.data = dataUrl; // Update the current view
+                    this.save();
+                    this.emit('manager:updated'); // Notify the app to update UI (like undo/redo buttons)
+                }
+            }
+            
+            /**
+             * Reverts the active layer to its previous state in the history.
+             */
+            undo() {
+                const layer = this.getActiveLayer();
+                if (layer && layer.historyIndex > 0) {
+                    layer.historyIndex--;
+                    layer.data = layer.history[layer.historyIndex];
+                    this.save();
+                    this.emit('manager:updated'); // Notify the app to re-render the canvas
+                }
+            }
+
+            /**
+             * Re-applies a state that was previously undone.
+             */
+            redo() {
+                const layer = this.getActiveLayer();
+                if (layer && layer.historyIndex < layer.history.length - 1) {
+                    layer.historyIndex++;
+                    layer.data = layer.history[layer.historyIndex];
+                    this.save();
+                    this.emit('manager:updated');
+                }
+            }
+            
+            /**
+             * Clears all drawing from the active layer and resets its history.
+             */
+            clearActiveLayer() {
+                const layer = this.getActiveLayer();
+                if(layer && confirm(`Clear all content from layer "${layer.name}"?`)) {
+                    layer.data = null; // No image data
+                    layer.history = []; // Empty history
+                    layer.historyIndex = -1;
+                    this.save();
+                    this.emit('manager:updated');
+                }
+            }
+
+            /**
+             * Renders the list of layers in the Layers Panel UI.
+             */
+            renderUI() {
+                const board = this.getActiveBoard();
+                if (!board) return;
+                this.elements.layersList.innerHTML = ''; // Clear the current list
+                // Create and append an HTML list item for each layer.
+                board.layers.forEach(layer => {
+                    const li = document.createElement('li');
+                    li.className = `layer-item ${layer.id === this.activeLayerId ? 'active' : ''}`;
+                    li.dataset.id = layer.id;
+                    li.innerHTML = `
+                        <span class="layer-name">${layer.name}</span>
+                        <button class="layer-visibility" title="Toggle Visibility">${layer.isVisible ? '👁️' : '🙈'}</button>
+                        <button class="delete-layer-btn" title="Delete Layer">🗑️</button>
+                    `;
+                    // Prepend so the newest layers appear at the top.
+                    this.elements.layersList.prepend(li);
+                });
+            }
+
+            /**
+             * Saves the entire boards data structure to localStorage.
+             */
+            save = () => this.storage.set('whiteboards', this.boards);
+        }
+        
+        /**
+         * Manages the <canvas> element, all drawing logic, and rendering of layers.
+         */
+        class WhiteboardCanvas {
+            constructor(layerManager) {
+                this.layerManager = layerManager;
+                this.canvas = document.getElementById('whiteboard-canvas');
+                this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
+
+                this.isDrawing = false;
+                this.state = {
+                    tool: 'pencil',
+                    color: '#000000',
+                    width: 5,
+                    startX: 0,
+                    startY: 0,
+                    snapshot: null,
+                };
+                
+                // State for ink pen
+                this.lastPoint = { x: 0, y: 0 };
+                this.lastTimestamp = 0;
+                this.lastVelocity = 0;
+                this.lastWidth = 0;
+
+                this.initListeners();
+            }
+
+            /**
+             * Sets up mouse and touch event listeners on the canvas for cross-device compatibility.
+             */
+            initListeners() {
+                const events = {
+                    start: ['mousedown', 'touchstart'],
+                    move: ['mousemove', 'touchmove'],
+                    stop: ['mouseup', 'mouseout', 'touchend', 'touchcancel']
+                };
+
+                events.start.forEach(eventName => this.canvas.addEventListener(eventName, this.startDrawing.bind(this)));
+                events.move.forEach(eventName => this.canvas.addEventListener(eventName, this.draw.bind(this)));
+                events.stop.forEach(eventName => this.canvas.addEventListener(eventName, this.stopDrawing.bind(this)));
+            }
+
+            /**
+             * Sets the active drawing tool and updates the cursor style.
+             * @param {string} tool - The tool to set (e.g., 'pencil', 'eraser').
+             */
+            setTool(tool) {
+                this.state.tool = tool;
+                document.body.classList.remove('cursor-pencil', 'cursor-eraser', 'cursor-ink-pen');
+                if (tool === 'pencil') document.body.classList.add('cursor-pencil');
+                else if (tool === 'eraser') document.body.classList.add('cursor-eraser');
+                else if (tool === 'ink-pen') document.body.classList.add('cursor-ink-pen');
+            }
+             /**
+             * Helper function to get correct coordinates for both mouse and touch events.
+             * @param {Event} e - The mouse or touch event.
+             * @returns {{x: number, y: number}} The coordinates relative to the canvas.
+             */
+            getEventCoords(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const clientX = e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches && e.touches[0] ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+            
+            /**
+             * Called when the user presses down on the canvas.
+             * @param {MouseEvent|TouchEvent} e - The event.
+             */
+            startDrawing(e) {
+                if (e.touches) e.preventDefault();
+                
+                const { x, y } = this.getEventCoords(e);
+                this.isDrawing = true;
+                this.state.startX = x;
+                this.state.startY = y;
+
+                // Save a snapshot of the fully rendered canvas. Essential for shape tools.
+                this.state.snapshot = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+
+                // Reset ink pen state for a new stroke
+                this.lastPoint = { x, y };
+                this.lastTimestamp = Date.now();
+                this.lastVelocity = 0;
+                this.lastWidth = this.state.width;
+
+                this.ctx.strokeStyle = this.state.color;
+                this.ctx.lineCap = 'round';
+                this.ctx.lineJoin = 'round';
+                
+                // For pencil/eraser, we begin a path that will be added to in draw()
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, y);
+            }
+
+            /**
+             * Called when the user releases the mouse or lifts their finger.
+             */
+            stopDrawing() {
+                if (this.isDrawing) {
+                    this.isDrawing = false;
+                    this.saveLayerState();
+                }
+            }
+            /**
+             * Called on mouse/finger move. This is performance-critical.
+             * @param {MouseEvent|TouchEvent} e - The event.
+             */
+            draw(e) {
+                if (!this.isDrawing) return;
+                if (e.touches) e.preventDefault();
+
+                const { x, y } = this.getEventCoords(e);
+                
+                this.ctx.globalCompositeOperation = (this.state.tool === 'eraser') ? 'destination-out' : 'source-over';
+                this.ctx.strokeStyle = (this.state.tool === 'eraser') ? 'rgba(0,0,0,1)' : this.state.color;
+                
+                switch(this.state.tool) {
+                    case 'pencil':
+                    case 'eraser':
+                        this.ctx.lineWidth = this.state.width;
+                        this.ctx.lineTo(x, y);
+                        this.ctx.stroke();
+                        break;
+                    case 'ink-pen':
+                        const now = Date.now();
+                        const timeDelta = now - this.lastTimestamp;
+                        const distance = Math.hypot(x - this.lastPoint.x, y - this.lastPoint.y);
+                        const velocity = distance / (timeDelta || 1);
+                        const smoothedVelocity = this.lastVelocity * 0.7 + velocity * 0.3;
+                        const maxStrokeWidth = this.state.width;
+                        const minStrokeWidth = Math.max(1, maxStrokeWidth / 4);
+                        const newWidth = Math.max(minStrokeWidth, maxStrokeWidth - (smoothedVelocity * 1.5));
+                        this.ctx.lineWidth = this.lastWidth * 0.8 + newWidth * 0.2;
+                        
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(this.lastPoint.x, this.lastPoint.y);
+                        this.ctx.lineTo(x, y);
+                        this.ctx.stroke();
+                        
+                        this.lastTimestamp = now;
+                        this.lastPoint = { x, y };
+                        this.lastVelocity = smoothedVelocity;
+                        this.lastWidth = this.ctx.lineWidth;
+                        break;
+                    case 'rectangle':
+                    case 'circle':
+                    case 'line':
+                        this.ctx.putImageData(this.state.snapshot, 0, 0); // Restore canvas
+                        this.ctx.lineWidth = this.state.width;
+                        this.ctx.beginPath();
+                        if (this.state.tool === 'rectangle') {
+                            this.ctx.strokeRect(this.state.startX, this.state.startY, x - this.state.startX, y - this.state.startY);
+                        } else if (this.state.tool === 'circle') {
+                            const radius = Math.hypot(x - this.state.startX, y - this.state.startY);
+                            this.ctx.arc(this.state.startX, this.state.startY, radius, 0, 2 * Math.PI);
+                            this.ctx.stroke();
+                        } else if (this.state.tool === 'line') {
+                            this.ctx.moveTo(this.state.startX, this.state.startY);
+                            this.ctx.lineTo(x, y);
+                            this.ctx.stroke();
+                        }
+                        break;
+                }
+            }
+            
+            /**
+             * Saves the drawing to the active layer, correcting for other layers.
+             */
+            async saveLayerState() {
+                const layer = this.layerManager.getActiveLayer();
+                if (!layer) return;
+
+                // Create a canvas for the new combined layer data
+                const newLayerCanvas = document.createElement('canvas');
+                newLayerCanvas.width = this.canvas.width;
+                newLayerCanvas.height = this.canvas.height;
+                const newLayerCtx = newLayerCanvas.getContext('2d');
+
+                // 1. Draw the old data of the active layer onto our new canvas
+                if (layer.data) {
+                    const img = new Image();
+                    await new Promise(r => { img.onload = r; img.onerror = r; img.src = layer.data; });
+                    newLayerCtx.drawImage(img, 0, 0);
+                }
+                
+                // 2. Isolate just the new stroke by "subtracting" the snapshot from the final canvas image
+                const strokeCanvas = document.createElement('canvas');
+                strokeCanvas.width = this.canvas.width;
+                strokeCanvas.height = this.canvas.height;
+                const strokeCtx = strokeCanvas.getContext('2d');
+                
+                const snapshotImg = await createImageBitmap(this.state.snapshot);
+                strokeCtx.drawImage(snapshotImg, 0, 0); // Draw initial state
+                strokeCtx.globalCompositeOperation = 'source-over'; // default
+                strokeCtx.drawImage(this.canvas, 0, 0); // Draw final state on top
+                
+                // 3. Draw the isolated new stroke onto the new layer canvas
+                newLayerCtx.drawImage(strokeCanvas, 0, 0);
+
+                // 4. Update the layer manager with the new data URL
+                this.layerManager.updateActiveLayerData(newLayerCanvas.toDataURL('image/png'));
+            }
+
+            /**
+             * Renders all visible layers of the current board onto the canvas.
+             */
+            async render() {
+                // Clear the entire canvas before redrawing.
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                const board = this.layerManager.getActiveBoard();
+                if (!board) return;
+
+                // Get all layers that are marked as visible.
+                const visibleLayers = board.layers.filter(l => l.isVisible);
+                for (const layer of visibleLayers) {
+                    if (layer.data) { // If the layer has image data...
+                        try {
+                            const blob = await (await fetch(layer.data)).blob();
+                            if (blob.size > 0) {
+                                const img = await createImageBitmap(blob);
+                                this.ctx.drawImage(img, 0, 0); // ...draw it on the canvas.
+                            }
+                        } catch(e) {
+                            console.error("Could not render layer:", e);
+                        }
+                    }
+                }
+            }
+            
+            /**
+             * Resizes the canvas to fit its container and then re-renders the content.
+             */
+            resize() {
+                const container = document.querySelector('.whiteboard-container');
+                this.canvas.width = container.clientWidth;
+                this.canvas.height = Math.max(400, window.innerHeight - container.querySelector('.toolbar').offsetHeight - 80);
+                this.render();
+            }
+        }
+        
+        /**
+         * Main Application Class.
+         * This class initializes all the other components (Toolbar, LayerManager, Canvas)
+         * and connects them so they can communicate with each other. It's the "brain" of the application.
+         */
+        class App {
+            constructor() {
+                this.storage = new Storage();
+                this.toolbar = new Toolbar();
+                this.layerManager = new LayerManager(this.storage);
+                this.canvas = new WhiteboardCanvas(this.layerManager);
+                
+                this.init();
+                this.connectComponents();
+            }
+            
+            /**
+             * Performs initial setup tasks when the application starts.
+             */
+            init() {
+                // Load the theme (light/dark) from storage.
+                this.setTheme(this.storage.get('whiteboardTheme') || 'light');
+                this.canvas.resize();
+                this.updateUI();
+                 // Set the initial state of the stroke preview.
+                this.toolbar.updateStrokePreview({
+                    color: this.canvas.state.color,
+                    width: this.canvas.state.width
+                });
+            }
+
+            /**
+             * Wires up all the event listeners between the components.
+             * This is where the event-driven architecture comes together.
+             */
+            connectComponents() {
+                // Listen for events from the Toolbar
+                this.toolbar.on('tool:change', tool => {
+                    this.canvas.setTool(tool);
+                    this.toolbar.selectTool(tool);
+                });
+                this.toolbar.on('color:change', color => {
+                    this.canvas.state.color = color;
+                    this.toolbar.updateStrokePreview({ color, width: this.canvas.state.width });
+                });
+                this.toolbar.on('width:change', width => {
+                    this.canvas.state.width = width;
+                    this.toolbar.updateStrokePreview({ color: this.canvas.state.color, width });
+                });
+                this.toolbar.on('history:undo', () => this.layerManager.undo());
+                this.toolbar.on('history:redo', () => this.layerManager.redo());
+                this.toolbar.on('layer:clear', () => this.layerManager.clearActiveLayer());
+                this.toolbar.on('board:switch', id => this.layerManager.loadBoard(id));
+                this.toolbar.on('board:new', () => this.layerManager.createNewBoard(`Board ${this.layerManager.boards.length + 1}`));
+                this.toolbar.on('board:delete', () => this.layerManager.deleteActiveBoard());
+                this.toolbar.on('app:export', this.exportAsPNG.bind(this));
+                this.toolbar.on('theme:toggle', () => this.setTheme(document.body.classList.contains('dark-mode') ? 'light' : 'dark'));
+
+                // Listen for events from the LayerManager
+                this.layerManager.on('manager:updated', this.updateUI.bind(this));
+
+                // Listen for global browser events
+                window.addEventListener('resize', () => this.canvas.resize());
+                window.addEventListener('keydown', this.handleKeyPress.bind(this));
+            }
+
+            /**
+             * A central function to update all parts of the UI that depend on the application's state.
+             */
+            updateUI() {
+                this.canvas.render();
+                this.layerManager.renderUI();
+                this.toolbar.populateBoardSwitcher(this.layerManager.boards, this.layerManager.activeBoardId);
+                const activeLayer = this.layerManager.getActiveLayer();
+                this.toolbar.updateHistoryButtons({
+                    canUndo: activeLayer && activeLayer.historyIndex > 0,
+                    canRedo: activeLayer && activeLayer.historyIndex < activeLayer.history.length - 1,
+                });
+            }
+
+            /**
+             * Sets the color theme for the application.
+             * @param {'light' | 'dark'} theme - The theme to apply.
+             */
+            setTheme(theme) {
+                this.storage.set('whiteboardTheme', theme);
+                document.body.classList.toggle('dark-mode', theme === 'dark');
+            }
+            
+            /**
+             * Exports the current view of the canvas as a high-resolution PNG file.
+             */
+            async exportAsPNG() {
+                const scaleFactor = 2; // Export at 2x resolution for better quality
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = this.canvas.canvas.width * scaleFactor;
+                tempCanvas.height = this.canvas.canvas.height * scaleFactor;
+                
+                // Fill the background of the exported image with the current canvas background color.
+                tempCtx.fillStyle = getComputedStyle(document.body).getPropertyValue('--canvas-bg').trim();
+                tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                tempCtx.imageSmoothingEnabled = true;
+
+                // Draw all visible layers onto the temporary canvas.
+                const board = this.layerManager.getActiveBoard();
+                if (!board) return;
+
+                const visibleLayers = board.layers.filter(l => l.isVisible);
+                for (const layer of visibleLayers) {
+                    if (layer.data) {
+                        const img = new Image();
+                        // We must wait for each layer's image to load before drawing it.
+                        await new Promise(resolve => {
+                            img.onload = () => { 
+                                tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height); 
+                                resolve(); 
+                            };
+                            img.onerror = resolve; // Don't let a broken image stop the export.
+                            img.src = layer.data;
+                        });
+                    }
+                }
+                
+                // Create a temporary link element to trigger the download.
+                const link = document.createElement('a');
+                link.download = `${board.name.replace(/\s+/g, '_')}-export.png`;
+                link.href = tempCanvas.toDataURL('image/png');
+                link.click();
+            }
+
+            /**
+             * Handles global keyboard shortcuts for tools and actions.
+             * @param {KeyboardEvent} e - The keyboard event.
+             */
+            handleKeyPress(e) {
+                // Ignore key presses if the user is typing in an input field.
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                
+                // Undo (Ctrl+Z) and Redo (Ctrl+Y)
+                if (e.ctrlKey || e.metaKey) { // metaKey is for Command on macOS
+                    if (e.key.toLowerCase() === 'z') { e.preventDefault(); this.layerManager.undo(); }
+                    if (e.key.toLowerCase() === 'y') { e.preventDefault(); this.layerManager.redo(); }
+                } else {
+                    // Tool shortcuts (P for Pencil, E for Eraser, etc.)
+                    const toolMap = { p: 'pencil', i: 'ink-pen', e: 'eraser', r: 'rectangle', c: 'circle', l: 'line' };
+                    if (toolMap[e.key.toLowerCase()]) {
+                        this.toolbar.emit('tool:change', toolMap[e.key.toLowerCase()]);
+                    }
+                }
+            }
+        }
+        
+        // This ensures the script runs only after the entire HTML document has been loaded.
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new App();
+        });
+    </script>
+</body>
+</html>
